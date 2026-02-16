@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 min-h-screen">
+    
+    <!-- Header -->
+    <div class="bg-white shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-800">My Tasks</h1>
+            <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        
+        <!-- Add Task Form -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Add New Task</h2>
+            <form id="add-task-form" class="space-y-4">
+                <div>
+                    <input 
+                        type="text" 
+                        id="task-title" 
+                        placeholder="Task title"
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        required
+                    >
+                </div>
+                <div>
+                    <textarea 
+                        id="task-description" 
+                        placeholder="Description (optional)"
+                        class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        rows="3"
+                    ></textarea>
+                </div>
+                <button 
+                    type="submit" 
+                    class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition"
+                >
+                    Add Task
+                </button>
+            </form>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">Tasks</h2>
+            
+            <div id="tasks-container" class="space-y-3">
+                <!-- Tasks will be loaded here -->
+            </div>
+
+            <div id="no-tasks" class="hidden text-center text-gray-500 py-8">
+                No tasks yet. Add one above!
+            </div>
+        </div>
+    </div>
+
+    <script src="js/tasks.js"></script>
+</body>
+</html>
