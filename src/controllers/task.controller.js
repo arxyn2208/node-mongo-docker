@@ -7,7 +7,7 @@ const createtask = async function (req, res) {
 
         const count = await Task.countDocuments({ user: userId }); // count existing tasks
 
-        const newtask = await Task.create({title, description, completed, user: userId, order: count});
+        const newtask = await Task.create({title, description, completed, userId: userId, order: count});
         res.status(201).json(newtask);
     } catch (error) {
         res.status(500).json({ error: error.message });
