@@ -2,18 +2,21 @@ const Task = require('../models/tasks');
 
 const createtask = async function (req, res) {
     try {
-        const {title,description,completed} = req.body ;
+        const {title, description, completed} = req.body;
         const userId = req.user.userId;
-        const newtask = await Task.create({title,description,completed,userId});
+
+        const count = await Task.countDocuments({ user: userId }); // count existing tasks
+
+        const newtask = await Task.create({title, description, completed, user: userId, order: count});
         res.status(201).json(newtask);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-    };
+};
 const getAlltasks = async function (req, res) {
     try {
         const userId = req.user.userId;
-        const tasks = await Task.find({ userId });
+        const tasks = await Task.find({ userId }).sort({ order: 1 });
         res.status(200).json(tasks);
     
     }
@@ -65,6 +68,21 @@ const deletetask = async function(req, res) {
         res.status(500).json({ error: error.message });
     }
 };
+const reorderTasks = async (req, res) => {
+    try {
+        const { orderedIds } = req.body;
+        
+        const updates = orderedIds.map((id, index) =>
+            Task.findOneAndUpdate({ _id: id, user: req.user.id }, { order: index })
+        );
+        
+        await Promise.all(updates);
+        
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
 
 // ← ADD THIS: Export all functions
 module.exports = {
@@ -72,5 +90,6 @@ module.exports = {
     getAlltasks,
     gettaskbyid,
     updatetask,
-    deletetask
+    deletetask,
+    reorderTasks
 };

@@ -39,7 +39,7 @@ addTaskForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Load all tasks
+
 async function loadTasks() {
     try {
         const response = await fetch('/api/tasks', {
@@ -65,7 +65,7 @@ async function loadTasks() {
 // Display tasks
 function displayTasks(tasks) {
     tasksContainer.innerHTML = tasks.map(task => `
-        <div class="border border-gray-200 rounded p-4 ${task.completed ? 'bg-gray-50' : 'bg-white'}">
+        <div class="task-item border border-gray-200 rounded p-4 ${task.completed ? 'bg-gray-50' : 'bg-white'}" data-id="${task._id}">
             <div class="flex items-start justify-between">
                 <div class="flex-1">
                     <h3 class="font-semibold text-gray-800 ${task.completed ? 'line-through text-gray-500' : ''}">
@@ -90,6 +90,23 @@ function displayTasks(tasks) {
             </div>
         </div>
     `).join('');
+
+ Sortable.create(tasksContainer, {
+        animation: 150,
+        onEnd: async () => {
+            const items = document.querySelectorAll('.task-item');
+            const orderedIds = [...items].map(el => el.dataset.id);
+
+            await fetch('/api/tasks/reorder', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ orderedIds })
+            });
+        }
+    });
 }
 
 // Toggle task completion
